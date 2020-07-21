@@ -28,12 +28,9 @@ function totalSettings(){
       if (checkedRadioBtn){
           var billItemType = checkedRadioBtn.value
 
-          if(billItemType === "call"){
-              billWithSettings.makeCall()
-          }
-          else if (billItemType === "sms"){
-              billWithSettings.sendSms()
-          }
+          
+              billWithSettings.grandTotal(billItemType)
+          
 
 callTotalSettingsElem.innerHTML = billWithSettings.getTotalCallCost().toFixed(2);
 smsTotalSettingsElem.innerHTML =billWithSettings.getTotalSmsCost().toFixed(2);
