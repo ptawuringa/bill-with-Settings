@@ -69,17 +69,18 @@ function sendSms(){
 }
 
 function hasReachedCriticalLevel(){
+    // alert("total " + getTotalCost() + "critical " + getCriticalLevel())
     return getTotalCost() >= getCriticalLevel();
 }
 
 function totalClassName(){
 
     if(hasReachedCriticalLevel()) {
-    return "critical"
+    return "danger"
 }
 
 
-    if(getTotalCost() >= getWarningLevel()) {
+   else if(getTotalCost() >= getWarningLevel()) {
         return "warning"
     }
 
