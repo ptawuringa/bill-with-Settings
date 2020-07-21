@@ -8,65 +8,50 @@ const warningLevelSettingElem = document.querySelector(".warningLevelSetting");
 const criticalLevelSettingElem = document.querySelector(".criticalLevelSetting");
 const updateSettingsElem = document.querySelector(".updateSettings");
 
-var callTotal = 0
-var smsTotal = 0
-var total = 0
 
-var call = 0
-var sms = 0
-var warning = 0
-var critical = 0
+var billWithSettings = BillWithSettings()
 
 function settingsUpdate(){
 
-    call = Number(callCostSettingElem.value);
-    sms = Number(smsCostSettingElem.value);
-    warning = Number(warningLevelSettingElem.value);
-    critical = Number(criticalLevelSettingElem.value);
+    billWithSettings.setCallCost(Number(callCostSettingElem.value));
+    billWithSettings.setSmsCost(Number(smsCostSettingElem.value));
+    billWithSettings.setWarningLevel(Number(warningLevelSettingElem.value));
+    billWithSettings.setCriticalLevel (Number(criticalLevelSettingElem.value));
 
     settingsStyleColor();
 
 }
 
 function totalSettings(){
-    if(total<critical) {
+   
       var checkedRadioBtn = document.querySelector("input[name='billItemTypeWithSettings']:checked");
       if (checkedRadioBtn){
           var billItemType = checkedRadioBtn.value
 
           if(billItemType === "call"){
-              callTotal += call;
+              billWithSettings.makeCall()
           }
           else if (billItemType === "sms"){
-              smsTotal += sms;
+              billWithSettings.sendSms()
           }
 
-callTotalSettingsElem.innerHTML = callTotal.toFixed(2);
-smsTotalSettingsElem.innerHTML = smsTotal.toFixed(2);
+callTotalSettingsElem.innerHTML = billWithSettings.getTotalCallCost().toFixed(2);
+smsTotalSettingsElem.innerHTML =billWithSettings.getTotalSmsCost().toFixed(2);
 
-total = callTotal + smsTotal;
-totalSettingsElem.innerHTML = total.toFixed(2);
+
+totalSettingsElem.innerHTML = billWithSettings.getTotalCost().toFixed(2);
 
 settingsStyleColor();
       }
-    }
+   
 }
 
 function settingsStyleColor(){
     totalSettingsElem.classList.remove("danger");
     totalSettingsElem.classList.remove("warning");
 
-    if (total>= critical){
-        totalSettingsElem.classList.remove("warning")
-
-        totalSettingsElem.classList.add("danger");
-    }
-    else if (total >= warning && total < critical){
-        totalSettingsElem.classList.remove("danger");
-
-        totalSettingsElem.classList.add("warning");
-
-    }
+    totalSettingsElem.classList.add(billWithSettings.totalClassName());
+    
 }
 radioBillAddButton.addEventListener("click", totalSettings);
 updateSettingsElem.addEventListener("click", settingsUpdate);
